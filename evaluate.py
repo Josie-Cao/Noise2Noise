@@ -9,7 +9,7 @@ import glob
 import os
 
 def load_model(checkpoint_path):
-    # Load trained Noise2Noise model
+    """Load the trained Noise2Noise model"""
     print(f"Attempting to load model from path: {checkpoint_path}")
     print(f"File exists: {os.path.exists(checkpoint_path)}")
     
@@ -33,15 +33,15 @@ def load_model(checkpoint_path):
     return generator
 
 def calculate_psnr(img1, img2):
-    # Calculate PSNR
+    """Calculate PSNR"""
     return tf.image.psnr(img1, img2, max_val=1.0).numpy()
 
 def calculate_ssim(img1, img2):
-    # Calculate SSIM
+    """Calculate SSIM"""
     return tf.image.ssim(img1, img2, max_val=1.0).numpy()
 
 def evaluate(test_dataset, generator):
-    # Evaluate model performance
+    """Evaluate model performance"""
     psnr_scores = []
     ssim_scores = []
 
@@ -89,7 +89,7 @@ def evaluate(test_dataset, generator):
     return np.mean(psnr_scores), np.mean(ssim_scores)
 
 def visualize_results(clean_image, noisy_image, denoised_image, save_path):
-    # Visualize denoising results
+    """Visualize denoising results"""
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     
     axes[0].imshow(clean_image[0, :, :, VISUALIZATION_SLICE, 0], cmap='gray')
@@ -109,7 +109,7 @@ def visualize_results(clean_image, noisy_image, denoised_image, save_path):
     plt.close()
 
 def find_best_weight_file(checkpoint_dir):
-    # Find the best weight file in checkpoint directory
+    """Find the best weight file in the checkpoint directory"""
     best_weight_files = glob.glob(os.path.join(checkpoint_dir, "noise2noise_best_*.weights.h5"))
     if best_weight_files:
         # Sort by file modification time, choose the latest
@@ -125,7 +125,7 @@ def find_best_weight_file(checkpoint_dir):
     return None
 
 def main():
-    # Main evaluation function
+    """Main evaluation function"""
     # Check if weight file exists
     best_weight_file = find_best_weight_file(CHECKPOINT_DIR)
     if not best_weight_file:
