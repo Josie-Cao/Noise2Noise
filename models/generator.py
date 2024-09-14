@@ -1,16 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
-def conv_block(x, filters):
-    # Convolutional block for U-Net
-    x = layers.Conv3D(filters, 3, padding='same')(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.LeakyReLU(alpha=0.2)(x)
-    x = layers.Conv3D(filters, 3, padding='same')(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.LeakyReLU(alpha=0.2)(x)
-    return x
-
 def build_unet_generator(input_shape, filters=32):
     inputs = layers.Input(shape=input_shape)
     
@@ -50,3 +40,8 @@ def build_unet_generator(input_shape, filters=32):
     outputs = layers.Conv3D(1, 1, activation='tanh')(conv9)
     
     return tf.keras.Model(inputs=inputs, outputs=outputs)
+
+def conv_block(x, filters):
+    x = layers.Conv3D(filters, 3, padding='same', activation='relu')(x)
+    x = layers.Conv3D(filters, 3, padding='same', activation='relu')(x)
+    return x
